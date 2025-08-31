@@ -5,3 +5,5 @@ dj-database-url
 psycopg[binary]
 python-dotenv
 django-widget-tweaks
+google-generativeai>=0.7
+google-api-core>=2.19

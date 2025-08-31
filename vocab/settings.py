@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
 ]
 
-# ---- Middleware（只保留這份；不要再在檔案後面重複定義）----
+# ---- Middleware（只保留這份）----
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # 服務靜態檔
