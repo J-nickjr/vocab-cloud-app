@@ -16,8 +16,27 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from vocab import views as vocab_views  # 加入這行
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+
+    # ✅ 首頁直接跳 home 頁面
+    path('', vocab_views.home, name='home'),
+
+    # ✅ 你自定義的 register 等視圖
+    path('accounts/', include('accounts.urls')),
+
+    # ✅ 查單字功能（vocab app）
+    path('search/', vocab_views.search_word, name='search_word'),
+    path('history/', vocab_views.history, name='history'),
+
+    path('', include('vocab.urls')),
+
 ]
+
+
+
+
+

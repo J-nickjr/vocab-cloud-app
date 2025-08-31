@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>查單字</title>
+</head>
+
+<body>
+
+  <h2>Hi {{ request.user.username }}！請輸入要查的英文單字：</h2>
+  <form method="post" action="/search/">
+    {% csrf_token %}
+    <input type="text" name="word" placeholder="輸入英文單字">
+    <button type="submit">查詢</button>
+  </form>
+
+  {% if definition %}
+  <h3>查詢結果：</h3>
+  <p>{{ definition }}</p>
+  {% endif %}
+
+  <form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-light btn-sm">🚪 登出</button>
+  </form>
+
+</body>
+
+</html>

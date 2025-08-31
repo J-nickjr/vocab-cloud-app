@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+  <h1 class="mb-4">📘 查詢紀錄</h1>
+
+  <!-- 清空所有紀錄按鈕 -->
+  <form method="post" action="{% url 'clear_history' %}" class="mb-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">🗑 清空所有紀錄</button>
+  </form>
+
+  <!-- 顯示紀錄列表 -->
+  {% if histories %}
+    <div class="list-group">
+      {% for item in histories %}
+        <div class="list-group-item mb-3 shadow-sm rounded">
+          <h5 class="mb-2 text-primary">{{ item.word }}</h5>
+          <p style="white-space: pre-line;">{{ item.definition }}</p>
+          <p class="text-muted">查詢時間：{{ item.created_at|date:"Y-m-d H:i" }}</p>
+
+          <!-- 單筆刪除按鈕 -->
+          <form method="post" action="{% url 'delete_history' item.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>目前尚無查詢紀錄。</p>
+  {% endif %}
+
+  <!-- 返回查詢按鈕 -->
+  <div class="mt-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">⬅️ 返回查詢頁面</a>
+  </div>
+</div>
+{% endblock %}
