@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><title>登入</title></head>
+<body>
+  <h2>登入</h2>
+  {% if form.errors %}<p style="color:red">帳號或密碼錯誤</p>{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">登入</button>
+  </form>
+  <p><a href="/">回首頁</a></p>
+</body>
+</html>

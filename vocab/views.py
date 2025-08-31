@@ -16,6 +16,8 @@ import google.api_core.exceptions
 
 from .models import SearchHistory
 
+from django.http import HttpResponse
+
 # ✅ 載入 .env 的環境變數
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -131,3 +133,6 @@ def delete_history(request, pk):
 def clear_history(request):
     SearchHistory.objects.filter(user=request.user).delete()
     return redirect('history')
+
+def health(request):
+    return HttpResponse("ok")
