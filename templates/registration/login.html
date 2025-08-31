@@ -19,9 +19,16 @@
         <label for="id_password" class="form-label">密碼</label>
         <input id="id_password" class="form-control" type="password" name="password" required>
       </div>
+
       <input type="hidden" name="next" value="{{ next|default:'/' }}">
       <button class="btn btn-primary w-100" type="submit">登入</button>
     </form>
+
+    <div class="text-center mt-3" style="display:flex; gap:12px; justify-content:center;">
+      <a href="{% url 'register' %}">還沒有帳號？註冊一個</a>
+      <span>·</span>
+      <a href="{% url 'password_reset' %}">忘記密碼？</a>
+    </div>
 
     <div class="text-center mt-3"><a href="/">回首頁</a></div>
   </div>

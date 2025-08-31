@@ -18,5 +18,5 @@ urlpatterns = [
     # 內建登入/登出/重設密碼等路由（提供 name='login'）
     path("accounts/", include("django.contrib.auth.urls")),
     path("healthz/", views.health, name="healthz"),
-
+    path("accounts/register/", views.register, name="register"),
 ]

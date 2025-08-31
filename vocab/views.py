@@ -57,14 +57,19 @@ def home(request):
 
 # ✅ 註冊功能
 def register(request):
+    # 已登入就不用再註冊
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect("home")
+            login(request, user)          # 註冊後自動登入
+            return redirect("home")       # 回首頁或改成 'search_word'
     else:
         form = UserCreationForm()
+
     return render(request, "registration/register.html", {"form": form})
 
 # ✅ 查詢畫面與邏輯（只查詢，不寫 DB）

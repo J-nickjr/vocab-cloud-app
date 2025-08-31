@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:480px;margin:8vh auto;">
+  <div class="card" style="padding:24px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08)">
+    <h1 class="h4 mb-3">註冊</h1>
+
+    <form method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="id_username" class="form-label">使用者名稱</label>
+        {{ form.username.errors }}
+        <input id="id_username" class="form-control" type="text" name="username"
+               value="{{ form.username.value|default:'' }}" required autofocus>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_password1" class="form-label">密碼</label>
+        {{ form.password1.errors }}
+        <input id="id_password1" class="form-control" type="password" name="password1" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_password2" class="form-label">確認密碼</label>
+        {{ form.password2.errors }}
+        <input id="id_password2" class="form-control" type="password" name="password2" required>
+      </div>
+
+      <button class="btn btn-primary w-100" type="submit">建立帳號並登入</button>
+    </form>
+
+    <div class="text-center mt-3">
+      已有帳號？<a href="{% url 'login' %}">前往登入</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
