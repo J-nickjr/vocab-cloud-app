@@ -9,5 +9,6 @@ urlpatterns = [
     path("delete/<int:pk>/", views.delete_history, name="delete_history"),
     path("clear/", views.clear_history, name="clear_history"),
     path("add/", views.add_word, name="add_word"),
+    path("accounts/", include("django.contrib.auth.urls")),
 
 ]
