@@ -29,7 +29,7 @@ INSTALLED_APPS = [
 # ---- Middleware（只保留這份）----
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # 服務靜態檔
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ← 務必在這裡
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
