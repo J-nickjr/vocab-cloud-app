@@ -19,8 +19,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("healthz/", views.health, name="healthz"),
     path("accounts/register/", views.register, name="register"),
-    # ✅ 覆蓋登出，允許 GET/POST
-    path("logout/", views.logout_to_login, name="logout_to_login"),
-    # 內建帳號路由（login、password reset...）
-    path("accounts/", include("django.contrib.auth.urls")),
+
+    # ✅ 覆蓋 Django 內建登出：允許 GET/POST，並直接導到登入頁
+    path("accounts/logout/", views.logout_and_redirect_login, name="logout"),
 ]

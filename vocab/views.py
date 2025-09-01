@@ -155,7 +155,7 @@ def logout_then_home(request):
     logout(request)
     return redirect("home")  # 登出後回首頁
 
-@require_GET
-def logout_to_login(request):
+@require_http_methods(["GET", "POST"])
+def logout_and_redirect_login(request):
     logout(request)
     return redirect("login")  # 直接去 /accounts/login/
