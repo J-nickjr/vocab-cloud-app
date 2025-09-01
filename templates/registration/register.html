@@ -4,6 +4,10 @@
   <div class="card" style="padding:24px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08)">
     <h1 class="h4 mb-3">註冊</h1>
 
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+
     <form method="post" action="{% url 'register' %}">
       {% csrf_token %}
 
@@ -12,6 +16,13 @@
         {{ form.username.errors }}
         <input id="id_username" class="form-control" type="text" name="username"
                value="{{ form.username.value|default:'' }}" required autofocus>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email.errors }}
+        <input id="id_email" class="form-control" type="email" name="email"
+               value="{{ form.email.value|default:'' }}" required>
       </div>
 
       <div class="mb-3">

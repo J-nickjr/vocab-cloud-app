@@ -20,6 +20,9 @@ import google.api_core.exceptions
 from .models import SearchHistory
 
 from django.http import HttpResponse
+from accounts.forms import SignUpForm
+from django.contrib.auth import login
+
 
 # ✅ 載入 .env 的環境變數
 load_dotenv()
