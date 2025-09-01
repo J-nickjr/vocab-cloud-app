@@ -27,7 +27,14 @@
         <a href="{% url 'history' %}" class="btn btn-light btn-sm">📘 查詢紀錄</a>
         <form action="{% url 'logout' %}" method="post" style="display:inline;">
           {% csrf_token %}
-          <button type="submit" class="btn btn-outline-light btn-sm">🚪 登出</button>
+          {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light btn-sm">登出</button>
+          </form>
+          {% else %}
+          <a href="{% url 'login' %}" class="btn btn-light btn-sm">登入</a>
+          {% endif %}
         </form>
       </div>
     </div>
