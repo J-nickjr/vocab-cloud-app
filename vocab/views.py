@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect
+from django.views.decorators.http import require_GET
 
 import google.generativeai as genai
 import google.api_core.exceptions
@@ -153,3 +154,8 @@ def health(request):
 def logout_then_home(request):
     logout(request)
     return redirect("home")  # 登出後回首頁
+
+@require_GET
+def logout_to_login(request):
+    logout(request)
+    return redirect("login")  # 直接去 /accounts/login/
