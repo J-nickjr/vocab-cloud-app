@@ -10,6 +10,9 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth import logout
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import redirect
 
 import google.generativeai as genai
 import google.api_core.exceptions
@@ -141,3 +144,9 @@ def clear_history(request):
 
 def health(request):
     return HttpResponse("ok")
+
+
+@require_http_methods(["GET", "POST"])
+def logout_then_home(request):
+    logout(request)
+    return redirect("home")  # 登出後回首頁
