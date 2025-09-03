@@ -18,12 +18,12 @@ urlpatterns = [
     # 內建登入/登出/重設密碼等路由（提供 name='login'）
     path("healthz/", views.health, name="healthz"),
     path("accounts/register/", views.register, name="register"),
+    path("accounts/activate/<uidb64>/<token>/", views.activate, name="activate"),
 
     # ✅ 先放這裡：覆蓋 Django 內建 logout（允許 GET/POST，直接轉登入）
     path("accounts/logout/", views.logout_and_redirect_login, name="logout"),
 
     # ⬇️ 最後才 include 內建帳號路由（login、password reset…）
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/activate/<uidb64>/<token>/", views.activate, name="activate"),
 
 ]

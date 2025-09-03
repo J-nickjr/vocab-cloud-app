@@ -22,7 +22,6 @@ from .models import SearchHistory
 
 from django.http import HttpResponse
 from accounts.forms import SignUpForm
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -31,6 +30,9 @@ from django.conf import settings
 
 from accounts.forms import SignUpForm  # 用剛剛的含 email 表單
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.urls import reverse
+
 
 
 
@@ -70,6 +72,22 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('search_word')
     return redirect(reverse('login'))
+
+def send_activation_email(request, user: User):
+    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    activate_url = request.build_absolute_uri(reverse("activate", args=[uidb64, token]))
+    subject = "請啟用你的帳號"
+    message = render_to_string("registration/activation_email.txt", {
+        "user": user,
+        "activate_url": activate_url,
+    })
+    try:
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        print("✅ activation email sent to", user.email)
+    except Exception as e:
+        # 不讓寄信失敗噴 500；寫 log 即可，仍顯示「已寄出」頁
+        print("❌ activation email send failed:", repr(e))
 
 # ✅ 註冊功能
 def register(request):
@@ -188,15 +206,5 @@ def logout_and_redirect_login(request):
     logout(request)
     return redirect("login")  # 直接去 /accounts/login/
 
-def send_activation_email(request, user: User):
-    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
-    activate_url = request.build_absolute_uri(
-        reverse("activate", args=[uidb64, token])
-    )
-    subject = "請啟用你的帳號"
-    message = render_to_string("registration/activation_email.txt", {
-        "user": user,
-        "activate_url": activate_url,
-    })
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+
