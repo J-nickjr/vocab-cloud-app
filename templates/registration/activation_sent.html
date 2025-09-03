@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:520px;margin:8vh auto;">
+  <div class="card" style="padding:24px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08)">
+    <h1 class="h4 mb-3">驗證信已寄出</h1>
+    <p>我們已寄出一封啟用信到你的 Email。請在 3 天內點擊信中的連結完成啟用。</p>
+    <a class="btn btn-primary w-100" href="{% url 'login' %}">回登入頁</a>
+  </div>
+</div>
+{% endblock %}

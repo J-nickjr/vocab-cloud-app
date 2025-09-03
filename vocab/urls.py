@@ -24,4 +24,6 @@ urlpatterns = [
 
     # ⬇️ 最後才 include 內建帳號路由（login、password reset…）
     path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/activate/<uidb64>/<token>/", views.activate, name="activate"),
+
 ]

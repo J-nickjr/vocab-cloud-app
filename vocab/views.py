@@ -22,7 +22,16 @@ from .models import SearchHistory
 
 from django.http import HttpResponse
 from accounts.forms import SignUpForm
-from django.contrib.auth import login
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
+
+from accounts.forms import SignUpForm  # 用剛剛的含 email 表單
+from django.contrib.auth.models import User
+
 
 
 # ✅ 載入 .env 的環境變數
@@ -64,20 +73,39 @@ def home(request):
 
 # ✅ 註冊功能
 def register(request):
-    # 已登入就不用再註冊
     if request.user.is_authenticated:
         return redirect("home")
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)          # 註冊後自動登入
-            return redirect("home")       # 回首頁或改成 'search_word'
+            user = form.save(commit=False)
+            user.is_active = False                 # 先鎖住，等 email 驗證
+            user.email = form.cleaned_data["email"]
+            user.save()
+            send_activation_email(request, user)
+            return render(request, "registration/activation_sent.html")
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
 
     return render(request, "registration/register.html", {"form": form})
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except Exception:
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)  # 啟用後直接登入
+        return render(request, "registration/activation_complete.html")
+    else:
+        return render(request, "registration/activation_invalid.html", status=400)
+
+
 
 # ✅ 查詢畫面與邏輯（只查詢，不寫 DB）
 @login_required
@@ -159,3 +187,16 @@ def logout_then_home(request):
 def logout_and_redirect_login(request):
     logout(request)
     return redirect("login")  # 直接去 /accounts/login/
+
+def send_activation_email(request, user: User):
+    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    activate_url = request.build_absolute_uri(
+        reverse("activate", args=[uidb64, token])
+    )
+    subject = "請啟用你的帳號"
+    message = render_to_string("registration/activation_email.txt", {
+        "user": user,
+        "activate_url": activate_url,
+    })
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])

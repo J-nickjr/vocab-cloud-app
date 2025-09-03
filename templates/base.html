@@ -24,7 +24,8 @@
           <!-- 只保留這個 POST 表單，避免 405 -->
           <form method="post" action="{% url 'logout' %}" class="d-inline m-0 p-0">
             {% csrf_token %}
-            <button type="submit" class="btn btn-light btn-sm">登出</button>
+            <!-- 用超連結也可以，因為我們允許 GET -->
+            <a href="{% url 'logout' %}" class="btn btn-light btn-sm">登出</a>
           </form>
         {% else %}
           <a href="{% url 'login' %}" class="btn btn-light btn-sm">登入</a>

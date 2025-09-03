@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:520px;margin:8vh auto;">
+  <div class="card" style="padding:24px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08)">
+    <h1 class="h4 mb-3">連結無效</h1>
+    <p>驗證連結無效或已過期，請重新註冊或請管理員協助。</p>
+    <a class="btn btn-primary w-100" href="{% url 'register' %}">重新註冊</a>
+  </div>
+</div>
+{% endblock %}
